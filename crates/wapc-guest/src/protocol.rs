@@ -24,8 +24,8 @@ pub extern "C" fn __guest_call(op_len: i32, req_len: i32) -> i32 {
     buf.set_len(req_len as usize);
     opbuf.set_len(op_len as usize);
   };
-
-  REGISTRY.read().unwrap().get(&opbuf).map_or_else(
+  let r_clone = REGISTRY.read().unwrap().clone();
+  r_clone.get(&opbuf).map_or_else(
     || {
       let mut errmsg = b"No handler registered for function ".to_vec();
       errmsg.append(&mut opbuf);
